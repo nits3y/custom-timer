@@ -192,7 +192,7 @@ export default function Home() {
             >
               {isRunning ? "Pause" : "Start"}
             </button>
-            
+            {/* Reset Button */}
             <button
               onClick={resetTimer}
               className="px-12 py-6 bg-gray-600 hover:bg-gray-700 text-white rounded-2xl font-bold text-2xl transition-all duration-200 shadow-lg hover:shadow-gray-600/25"

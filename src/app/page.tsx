@@ -145,47 +145,47 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-2 sm:p-4 overflow-hidden">
       <audio ref={audioRef} preload="auto">
         Your browser does not support the audio element.
       </audio>
       
-      <div className="h-screen flex">
-        <div className={`flex-1 flex flex-col items-center justify-center relative transition-all duration-1000 ${
+      <div className="h-screen flex flex-col lg:flex-row">
+        <div className={`flex-1 flex flex-col items-center justify-center relative min-h-[50vh] lg:min-h-0 transition-all duration-1000 ${
           isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
           <button
             onClick={() => setShowSettingsPanel(true)}
-            className={`absolute top-8 left-8 p-3 text-gray-400 hover:text-white transition-all duration-700 rounded-lg hover:bg-gray-800 ${
+            className={`absolute top-4 left-4 sm:top-8 sm:left-8 p-2 sm:p-3 text-gray-400 hover:text-white transition-all duration-700 rounded-lg hover:bg-gray-800 ${
               isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
             }`}
             aria-label="Open Settings"
           >
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </button>
           
-          <div className="text-center">
-            <div className={`text-[12rem] md:text-[16rem] lg:text-[20rem] font-mono font-bold text-white tracking-wider leading-none transition-all duration-1200 delay-300 ${
+          <div className="text-center px-4">
+            <div className={`text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] xl:text-[12rem] 2xl:text-[16rem] font-mono font-bold text-white tracking-wider leading-none transition-all duration-1200 delay-300 ${
               isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
             }`}>
               {formatTime(timeLeft)}
             </div>
-            <div className={`text-2xl md:text-3xl text-gray-300 mt-8 transition-all duration-800 delay-500 ${
+            <div className={`text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-300 mt-4 sm:mt-6 lg:mt-8 transition-all duration-800 delay-500 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}>
               {timeLeft === 0 ? "Time's Up!" : isRunning ? "Running..." : "Paused"}
             </div>
           </div>
               
-          <div className={`flex gap-6 mt-16 transition-all duration-1000 delay-700 ${
+          <div className={`flex flex-col sm:flex-row gap-4 sm:gap-6 mt-8 sm:mt-12 lg:mt-16 px-4 transition-all duration-1000 delay-700 ${
             isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
             <button
               onClick={toggleTimer}
-              className={`px-12 py-6 rounded-2xl font-bold text-2xl transition-all duration-200 shadow-lg ${
+              className={`px-8 sm:px-12 py-4 sm:py-6 rounded-2xl font-bold text-lg sm:text-xl lg:text-2xl transition-all duration-200 shadow-lg w-full sm:w-auto ${
                 isRunning 
                   ? "bg-red-500 hover:bg-red-600 text-white hover:shadow-red-500/25" 
                   : "bg-green-500 hover:bg-green-600 text-white hover:shadow-green-500/25"
@@ -193,22 +193,21 @@ export default function Home() {
             >
               {isRunning ? "Pause" : "Start"}
             </button>
-            {/* Reset Button */}
             <button
               onClick={resetTimer}
-              className="px-12 py-6 bg-gray-600 hover:bg-gray-700 text-white rounded-2xl font-bold text-2xl transition-all duration-200 shadow-lg hover:shadow-gray-600/25"
+              className="px-8 sm:px-12 py-4 sm:py-6 bg-gray-600 hover:bg-gray-700 text-white rounded-2xl font-bold text-lg sm:text-xl lg:text-2xl transition-all duration-200 shadow-lg hover:shadow-gray-600/25 w-full sm:w-auto"
             >
               Reset
             </button>
           </div>
           
-          <div className={`absolute bottom-6 left-1/2 transform -translate-x-1/2 transition-all duration-1000 delay-1000 ${
+          <div className={`absolute bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 transition-all duration-1000 delay-1000 ${
             isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}>
-            <div className="bg-gray-800/80 backdrop-blur-sm border border-gray-600/30 rounded-full px-4 py-2 shadow-lg">
+            <div className="bg-gray-800/80 backdrop-blur-sm border border-gray-600/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 shadow-lg">
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium text-gray-300">
+                <span className="text-xs sm:text-sm font-medium text-gray-300">
                   Made by <span className="text-white font-semibold">Yestin Prado</span>
                 </span>
                 <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
@@ -217,17 +216,17 @@ export default function Home() {
           </div>
         </div>
         
-         <div className={`w-80 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 border-l border-gray-600/50 p-6 flex flex-col rounded-l-2xl transition-all duration-1000 delay-200 ${
-           isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
+         <div className={`w-full lg:w-80 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 border-t lg:border-t-0 lg:border-l border-gray-600/50 p-4 sm:p-6 flex flex-col lg:rounded-l-2xl rounded-t-2xl lg:rounded-t-none transition-all duration-1000 delay-200 ${
+           isLoaded ? 'opacity-100 translate-y-0 lg:translate-y-0 lg:translate-x-0' : 'opacity-0 translate-y-8 lg:translate-y-0 lg:translate-x-8'
          }`}>
-           <div className="flex items-center space-x-3 mb-6">
-             <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-               <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="flex items-center space-x-3 mb-4 sm:mb-6">
+             <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+               <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                </svg>
              </div>
-             <h2 className="text-2xl font-bold text-white">Timer Setup</h2>
-          </div>
+             <h2 className="text-xl sm:text-2xl font-bold text-white">Timer Setup</h2>
+           </div>
               
               {/* Time Input Section */}
            <div className="mb-6">
@@ -302,14 +301,14 @@ export default function Home() {
            </div>
            
            {/* Quick Presets */}
-           <div className="mb-6">
-             <h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center">
-               <svg className="w-4 h-4 text-purple-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-               </svg>
-               Quick Presets
-             </h3>
-             <div className="grid grid-cols-2 gap-2">
+                       <div className="mb-4 sm:mb-6">
+              <h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center">
+                <svg className="w-4 h-4 text-purple-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Quick Presets
+              </h3>
+              <div className="grid grid-cols-2 lg:grid-cols-2 gap-2">
                {[
                  { label: "25 sec", mins: 0, secs: 25 },
                  { label: "1 min", mins: 1, secs: 0 },
@@ -356,16 +355,16 @@ export default function Home() {
          </div>
       </div>
       
-      <div className={`fixed inset-y-0 right-0 w-96 bg-gray-900 border-l border-gray-700 transform transition-transform duration-300 ease-in-out z-50 ${
-        showSettingsPanel ? 'translate-x-0' : 'translate-x-full'
-      }`}>
-        <div className="flex items-center justify-between p-6 border-b border-gray-700">
+             <div className={`fixed inset-y-0 right-0 w-full sm:w-96 bg-gray-900 border-l border-gray-700 transform transition-transform duration-300 ease-in-out z-50 ${
+         showSettingsPanel ? 'translate-x-0' : 'translate-x-full'
+       }`}>
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-700">
           <div className="flex items-center space-x-3">
-            <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            <h2 className="text-xl font-bold text-white">Settings</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-white">Settings</h2>
           </div>
           <button
             onClick={() => setShowSettingsPanel(false)}
@@ -378,7 +377,7 @@ export default function Home() {
                 </button>
               </div>
               
-        <div className="flex-1 overflow-y-auto p-6 space-y-8">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

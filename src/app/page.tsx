@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
 export default function Home() {
   const [timeLeft, setTimeLeft] = useState(300);
@@ -33,18 +33,19 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
   
-  const notificationSounds = [
+  const notificationSounds = useMemo(() => [
     { id: 'wisle', name: 'Wisle', file: '/wisle.mp3' },
     { id: 'sir-jade', name: 'Sir Jade', file: '/sir-jade.mp3' },
     { id: 'none', name: 'No Sound', file: '' }
-  ];
+  ], []);
   
   const [selectedNotificationSound, setSelectedNotificationSound] = useState('wisle');
   const audioRef = useRef<HTMLAudioElement>(null);
   
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const AudioContextClass = window.AudioContext || (window as typeof window & { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      audioContextRef.current = new AudioContextClass();
     }
     
     return () => {
@@ -54,7 +55,7 @@ export default function Home() {
     };
   }, []);
   
-  const playTickSound = () => {
+  const playTickSound = useCallback(() => {
     if (!tickSoundEnabled || !audioContextRef.current) return;
     
     try {
@@ -77,9 +78,9 @@ export default function Home() {
     } catch (error) {
       console.log("Tick sound playback failed:", error);
     }
-  };
+  }, [tickSoundEnabled]);
   
-  const playNotificationSound = () => {
+  const playNotificationSound = useCallback(() => {
     const selectedSound = notificationSounds.find(sound => sound.id === selectedNotificationSound);
     
     if (!selectedSound || selectedSound.id === 'none' || !selectedSound.file) return;
@@ -92,7 +93,7 @@ export default function Home() {
         console.log("Notification sound playback failed:", error);
       });
     }
-  };
+  }, [selectedNotificationSound, notificationSounds]);
   
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -119,7 +120,7 @@ export default function Home() {
     }
     
     return () => clearInterval(interval);
-  }, [isRunning, timeLeft, autoRestart, initialTime]);
+  }, [isRunning, timeLeft, autoRestart, initialTime, playTickSound, playNotificationSound]);
   
   const formatTime = (time: number) => {
     const mins = Math.floor(time / 60);

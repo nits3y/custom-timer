@@ -11,6 +11,7 @@ export default function Home() {
   const [seconds, setSeconds] = useState(0);
   const audioContextRef = useRef<AudioContext | null>(null);
   const [tickSoundEnabled, setTickSoundEnabled] = useState(true);
+  const [voiceCountdownEnabled, setVoiceCountdownEnabled] = useState(true);
   const [showSettingsPanel, setShowSettingsPanel] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   
@@ -94,6 +95,33 @@ export default function Home() {
       });
     }
   }, [selectedNotificationSound, notificationSounds]);
+
+  // Voice countdown function using Web Speech API
+  const speakCountdown = useCallback((number: number) => {
+    if (!voiceCountdownEnabled || typeof window === 'undefined') return;
+    
+    try {
+      // Check if speech synthesis is supported
+      if ('speechSynthesis' in window) {
+        // Cancel any previous speech
+        window.speechSynthesis.cancel();
+        
+        // Create speech utterance
+        const utterance = new SpeechSynthesisUtterance(number.toString());
+        
+        // Configure voice settings for clear countdown
+        utterance.rate = 1.0;        
+        utterance.pitch = 1.5;       
+        utterance.volume = 2.0;      
+        utterance.lang = 'en-US';    
+        
+        // Speak the number
+        window.speechSynthesis.speak(utterance);
+      }
+    } catch (error) {
+      console.log("Voice countdown failed:", error);
+    }
+  }, [voiceCountdownEnabled]);
   
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -101,10 +129,25 @@ export default function Home() {
     if (isRunning && timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft(prev => {
-          if (prev > 1) {
-            playTickSound();
+          const newTime = prev - 1;
+          
+          // Play tick sound logic:
+          // - If voice countdown is enabled: only play tick sound when time > 5 seconds
+          // - If voice countdown is disabled: play tick sound for all seconds > 0
+          if (newTime > 0) {
+            if (voiceCountdownEnabled && newTime <= 5) {
+              // Skip tick sound during final 5 seconds when voice countdown is enabled
+            } else {
+              playTickSound();
+            }
           }
-          return prev - 1;
+          
+          // Voice countdown for final 5 seconds (5, 4, 3, 2, 1) - only when enabled
+          if (voiceCountdownEnabled && newTime >= 1 && newTime <= 5) {
+            speakCountdown(newTime);
+          }
+          
+          return newTime;
         });
       }, 1000);
     } else if (timeLeft === 0) {
@@ -120,7 +163,7 @@ export default function Home() {
     }
     
     return () => clearInterval(interval);
-  }, [isRunning, timeLeft, autoRestart, initialTime, playTickSound, playNotificationSound]);
+  }, [isRunning, timeLeft, autoRestart, initialTime, playTickSound, playNotificationSound, speakCountdown, voiceCountdownEnabled]);
   
   const formatTime = (time: number) => {
     const mins = Math.floor(time / 60);
@@ -447,6 +490,35 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+                <span className="text-lg font-semibold text-white">Voice Countdown</span>
+              </div>
+              <button
+                onClick={() => setVoiceCountdownEnabled(!voiceCountdownEnabled)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  voiceCountdownEnabled ? "bg-blue-500" : "bg-gray-600"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    voiceCountdownEnabled ? "translate-x-6" : "translate-x-1"
+                  }`}
+                />
+              </button>
+            </div>
+            <p className="text-xs text-gray-400 mt-2 ml-7">
+              {voiceCountdownEnabled 
+                ? "Speaks numbers 5, 4, 3, 2, 1 during final countdown" 
+                : "Silent final countdown"
+              }
+            </p>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
                 <span className="text-lg font-semibold text-white">Auto Restart</span>
@@ -485,6 +557,7 @@ export default function Home() {
               <p><span className="text-gray-300">Status:</span> {isRunning ? "Running" : "Stopped"}</p>
               <p><span className="text-gray-300">Notification:</span> {notificationSounds.find(s => s.id === selectedNotificationSound)?.name}</p>
               <p><span className="text-gray-300">Tick Sound:</span> {tickSoundEnabled ? "Enabled" : "Disabled"}</p>
+              <p><span className="text-gray-300">Voice Countdown:</span> {voiceCountdownEnabled ? "Enabled" : "Disabled"}</p>
               <p><span className="text-gray-300">Auto Restart:</span> {autoRestart ? "Enabled" : "Disabled"}</p>
             </div>
           </div>
